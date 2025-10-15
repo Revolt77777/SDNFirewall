@@ -44,8 +44,35 @@ def firewall_policy_processing(policies):
         # in Implementation Hints on how to do this. 
         # HINT:  Think about how to use the priority in your flow modification.
 
-        rule = None # Please note that you need to redefine this variable below to create a valid POX Flow Modification Object
+        # fields = ('rulenum','action','mac-src','mac-dst','ip-src','ip-dst','ipprotocol','port-src','port-dst','comment')
 
+
+        rule = of.ofp_flow_mod()
+        rule.match = of.ofp_match()
+        rule.match.dl_type = 0x800
+
+        # Set the header values
+        if policy['mac-src'] != '-':
+            rule.match.dl_src = EthAddr(policy['mac-src'])
+        if policy['mac-dst'] != '-':
+            rule.match.dl_dst = EthAddr(policy['mac-dst'])
+        if policy['ip-src'] != '-':
+            rule.match.nw_src = policy['ip-src']
+        if policy['ip-dst'] != '-':
+            rule.match.nw_dst = policy['ip-dst']
+        if policy['ipprotocol'] != '-':
+            rule.match.nw_proto = int(policy['ipprotocol'])
+        if policy['port-src'] != '-':
+            rule.match.tp_src = int(policy['port-src'])
+        if policy['port-dst'] != '-':
+            rule.match.tp_dst = int(policy['port-dst'])
+
+        # Set the action - allow/block
+        if policy['action'] == 'Allow':
+            rule.priority = 10000
+            rule.actions.append(of.ofp_action_output(port=of.OFPP_NORMAL))
+        else:
+            rule.priority = 1
 
         # End Code Here
         print('Added Rule ',policy['rulenum'],': ',policy['comment'])

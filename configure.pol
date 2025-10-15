@@ -24,5 +24,38 @@
 # subnet other than /32 must be 0.
 #
 # Example Rules:
-1,Block,-,-,10.0.0.1/32,10.0.1.0/24,6,-,80,Block 10.0.0.1 from accessing a web server on the 10.0.1.0/24 network
-2,Allow,-,-,10.0.0.1/32,10.0.1.125/32,6,-,80,Allow 10.0.0.1 to access a web server on 10.0.1.125 overriding previous rule
+# 1,Block,-,-,10.0.0.1/32,10.0.1.0/24,6,-,80,Block 10.0.0.1 from accessing a web server on the 10.0.1.0/24 network
+# 2,Allow,-,-,10.0.0.1/32,10.0.1.125/32,6,-,80,Allow 10.0.0.1 to access a web server on 10.0.1.125 overriding previous rule
+
+# Task 1:
+1,Block,-,-,10.0.30.4/32,-,6,-,-,Block cn4 from initiating any TCP traffic
+
+# Task 2:
+2,Block,-,-,10.0.30.5/32,-,-,-,-,Block cn5 from initiating any outgoing traffic
+3,Block,-,-,-,10.0.30.5/32,-,-,-,Block cn5 from receiving any incoming traffic
+
+# Task 3:
+4,Block,-,-,-,-,1,-,-,Block all ICMP globally
+5,Allow,-,-,-,10.0.0.0/24,1,-,-,Allow ICMP ping from all to hq
+6,Allow,-,-,10.0.0.0/24,-,1,-,-,Allow ICMP ping from hq to all
+
+# Task 4:
+10,Block,-,-,10.0.30.3/32,-,6,80,-,Block cn3 HTTP responses
+11,Block,-,-,10.0.30.3/32,-,6,443,-,Block cn3 HTTPS responses
+
+# Task 5:
+12,Block,-,-,10.0.40.128/30,10.0.1.32/30,6,-,9520,Block tcp connection from uk2-5 to us3-4 on port 9520
+13,Block,-,-,10.0.20.124/30,10.0.1.32/30,6,-,9520,Block tcp connection from in4-5 to us3-4 on port 9520
+14,Block,-,-,10.0.1.125/32,10.0.1.32/30,6,-,9520,Block tcp connection from us5 to us3-4 on port 9520
+15,Block,-,-,10.0.0.220/32,10.0.1.32/30,6,-,9520,Block tcp connection from hq5 to us3-4 on port 9520
+
+# Task 6:
+16,Block,00:00:00:01:00:1e,-,-,-,17,-,-,Block udp from us1 mac address
+
+# Task 7:
+17,Block,-,-,-,10.0.0.0/24,6,-,25,Block tcp from all to hq on port 25
+18,Block,-,-,-,10.0.1.0/24,6,-,25,Block tcp from all to us on port 25
+19,Block,-,-,-,10.0.20.0/24,6,-,25,Block tcp from all to in on port 25
+20,Block,-,-,-,10.0.30.0/24,6,-,25,Block tcp from all to cn on port 25
+21,Block,-,-,-,10.0.40.0/24,6,-,25,Block tcp from all to uk on port 25
+
